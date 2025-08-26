@@ -517,595 +517,6 @@
       automation: "Tự động hóa",
       noChargesThreshold: "⌛ Đang chờ số lần sạc đạt {threshold}. Hiện tại {current}. Lần tiếp theo trong {time}...",
     },
-    tr: {
-      title: "WPlace Otomatik-Resim",
-      toggleOverlay: "Katmanı Aç/Kapat",
-      scanColors: "Renkleri Tara",
-      uploadImage: "Resim Yükle",
-      resizeImage: "Resmi Yeniden Boyutlandır",
-      selectPosition: "Konum Seç",
-      startPainting: "Boyamayı Başlat",
-      stopPainting: "Boyamayı Durdur",
-      checkingColors: "🔍 Uygun renkler kontrol ediliyor...",
-      noColorsFound: "❌ Sitede renk paletini açın ve tekrar deneyin!",
-      colorsFound: "✅ {count} uygun renk bulundu. Yüklemeye hazır.",
-      loadingImage: "🖼️ Resim yükleniyor...",
-      imageLoaded: "✅ Resim {count} geçerli piksel ile yüklendi",
-      imageError: "❌ Resim yüklenirken hata oluştu",
-      selectPositionAlert: "Sanatı başlatmak istediğiniz ilk pikseli boyayın!",
-      waitingPosition: "👆 Referans pikseli boyamanız bekleniyor...",
-      positionSet: "✅ Konum başarıyla ayarlandı!",
-      positionTimeout: "❌ Konum seçme süresi doldu",
-      startPaintingMsg: "🎨 Boyama başlatılıyor...",
-      paintingProgress: "🧱 İlerleme: {painted}/{total} piksel...",
-      noCharges: "⌛ Yeterli hak yok. Bekleniyor {time}...",
-      paintingStopped: "⏹️ Boyama kullanıcı tarafından durduruldu",
-      paintingComplete: "✅ Boyama tamamlandı! {count} piksel boyandı.",
-      paintingError: "❌ Boyama sırasında hata oluştu",
-      missingRequirements: "❌ Önce resim yükleyip konum seçmelisiniz",
-      progress: "İlerleme",
-      pixels: "Pikseller",
-      charges: "Haklar",
-      estimatedTime: "Tahmini süre",
-      initMessage: "Başlamak için 'Resim Yükle'ye tıklayın",
-      waitingInit: "Başlatma bekleniyor...",
-      resizeSuccess: "✅ Resim {width}x{height} boyutuna yeniden boyutlandırıldı",
-      paintingPaused: "⏸️ Boyama duraklatıldı, Konum X: {x}, Y: {y}",
-      captchaNeeded: "❗ CAPTCHA gerekli. Devam etmek için bir pikseli manuel olarak boyayın.",
-      saveData: "İlerlemeyi Kaydet",
-      loadData: "İlerlemeyi Yükle",
-      saveToFile: "Dosyaya Kaydet",
-      loadFromFile: "Dosyadan Yükle",
-      dataManager: "Veri Yöneticisi",
-      autoSaved: "✅ İlerleme otomatik olarak kaydedildi",
-      dataLoaded: "✅ İlerleme başarıyla yüklendi",
-      fileSaved: "✅ İlerleme dosyaya başarıyla kaydedildi",
-      fileLoaded: "✅ İlerleme dosyadan başarıyla yüklendi",
-      noSavedData: "❌ Kayıtlı ilerleme bulunamadı",
-      savedDataFound: "✅ Kayıtlı ilerleme bulundu! Devam etmek için yükleyin.",
-      savedDate: "Kaydedilme tarihi: {date}",
-      clickLoadToContinue: "Devam etmek için 'İlerlemeyi Yükle'ye tıklayın.",
-      fileError: "❌ Dosya işlenirken hata oluştu",
-      invalidFileFormat: "❌ Geçersiz dosya formatı",
-      paintingSpeed: "Boyama Hızı",
-      pixelsPerSecond: "piksel/saniye",
-      speedSetting: "Hız: {speed} piksel/sn",
-      settings: "Ayarlar",
-      botSettings: "Bot Ayarları",
-      close: "Kapat",
-      language: "Dil",
-      themeSettings: "Tema Ayarları",
-      themeSettingsDesc: "Arayüz için tercih ettiğiniz renk temasını seçin.",
-      languageSelectDesc: "Tercih ettiğiniz dili seçin. Değişiklikler hemen uygulanacaktır.",
-      autoCaptcha: "Oto-CAPTCHA Çözücü",
-      autoCaptchaDesc: "CAPTCHA süresi dolduğunda manuel piksel yerleştirmeyi taklit ederek otomatik çözmeyi dener.",
-      applySettings: "Ayarları Uygula",
-      settingsSaved: "✅ Ayarlar başarıyla kaydedildi!",
-      cooldownSettings: "Bekleme Süresi Ayarları",
-      waitCharges: "Hakların {threshold} seviyesine ulaşması bekleniyor. Şu anda {current}. Sonraki {time} içinde...",
-      captchaSolving: "🤖 CAPTCHA çözülmeye çalışılıyor..."
-    }
-  }
-
-  (async () => {
-  // CONFIGURATION CONSTANTS
-  const CONFIG = {
-    COOLDOWN_DEFAULT: 31000,
-    TRANSPARENCY_THRESHOLD: 100,
-    WHITE_THRESHOLD: 250,
-    LOG_INTERVAL: 10,
-    PAINTING_SPEED: {
-      MIN: 1,          // Minimum 1 pixel batch size
-      MAX: 1000,       // Maximum 1000 pixels batch size
-      DEFAULT: 5,      // Default 5 pixels batch size
-    },
-    BATCH_MODE: "normal", // "normal" or "random" - default to normal
-    RANDOM_BATCH_RANGE: {
-      MIN: 3,          // Random range minimum
-      MAX: 20,         // Random range maximum
-    },
-    PAINTING_SPEED_ENABLED: false, // Off by default
-    AUTO_CAPTCHA_ENABLED: true, // Turnstile generator enabled by default
-    TOKEN_SOURCE: "generator", // "generator", "manual", or "hybrid" - default to generator
-    COOLDOWN_CHARGE_THRESHOLD: 1, // Default wait threshold
-    // Desktop Notifications (defaults)
-    NOTIFICATIONS: {
-        ENABLED: true,
-        ON_CHARGES_REACHED: true,
-        ONLY_WHEN_UNFOCUSED: true,
-        REPEAT_MINUTES: 5, // repeat reminder while threshold condition holds
-    },
-    OVERLAY: {
-      OPACITY_DEFAULT: 0.6,
-      BLUE_MARBLE_DEFAULT: false,
-      ditheringEnabled: false,
-    },
-    // --- START: Color data from colour-converter.js ---
-    // New color structure with proper ID mapping
-    COLOR_MAP: {
-      0: { id: 1, name: 'Black', rgb: { r: 0, g: 0, b: 0 } },
-      1: { id: 2, name: 'Dark Gray', rgb: { r: 60, g: 60, b: 60 } },
-      2: { id: 3, name: 'Gray', rgb: { r: 120, g: 120, b: 120 } },
-      3: { id: 4, name: 'Light Gray', rgb: { r: 210, g: 210, b: 210 } },
-      4: { id: 5, name: 'White', rgb: { r: 255, g: 255, b: 255 } },
-      5: { id: 6, name: 'Deep Red', rgb: { r: 96, g: 0, b: 24 } },
-      6: { id: 7, name: 'Red', rgb: { r: 237, g: 28, b: 36 } },
-      7: { id: 8, name: 'Orange', rgb: { r: 255, g: 127, b: 39 } },
-      8: { id: 9, name: 'Gold', rgb: { r: 246, g: 170, b: 9 } },
-      9: { id: 10, name: 'Yellow', rgb: { r: 249, g: 221, b: 59 } },
-      10: { id: 11, name: 'Light Yellow', rgb: { r: 255, g: 250, b: 188 } },
-      11: { id: 12, name: 'Dark Green', rgb: { r: 14, g: 185, b: 104 } },
-      12: { id: 13, name: 'Green', rgb: { r: 19, g: 230, b: 123 } },
-      13: { id: 14, name: 'Light Green', rgb: { r: 135, g: 255, b: 94 } },
-      14: { id: 15, name: 'Dark Teal', rgb: { r: 12, g: 129, b: 110 } },
-      15: { id: 16, name: 'Teal', rgb: { r: 16, g: 174, b: 166 } },
-      16: { id: 17, name: 'Light Teal', rgb: { r: 19, g: 225, b: 190 } },
-      17: { id: 20, name: 'Cyan', rgb: { r: 96, g: 247, b: 242 } },
-      18: { id: 44, name: 'Light Cyan', rgb: { r: 187, g: 250, b: 242 } },
-      19: { id: 18, name: 'Dark Blue', rgb: { r: 40, g: 80, b: 158 } },
-      20: { id: 19, name: 'Blue', rgb: { r: 64, g: 147, b: 228 } },
-      21: { id: 21, name: 'Indigo', rgb: { r: 107, g: 80, b: 246 } },
-      22: { id: 22, name: 'Light Indigo', rgb: { r: 153, g: 177, b: 251 } },
-      23: { id: 23, name: 'Dark Purple', rgb: { r: 120, g: 12, b: 153 } },
-      24: { id: 24, name: 'Purple', rgb: { r: 170, g: 56, b: 185 } },
-      25: { id: 25, name: 'Light Purple', rgb: { r: 224, g: 159, b: 249 } },
-      26: { id: 26, name: 'Dark Pink', rgb: { r: 203, g: 0, b: 122 } },
-      27: { id: 27, name: 'Pink', rgb: { r: 236, g: 31, b: 128 } },
-      28: { id: 28, name: 'Light Pink', rgb: { r: 243, g: 141, b: 169 } },
-      29: { id: 29, name: 'Dark Brown', rgb: { r: 104, g: 70, b: 52 } },
-      30: { id: 30, name: 'Brown', rgb: { r: 149, g: 104, b: 42 } },
-      31: { id: 31, name: 'Beige', rgb: { r: 248, g: 178, b: 119 } },
-      32: { id: 52, name: 'Light Beige', rgb: { r: 255, g: 197, b: 165 } },
-      33: { id: 32, name: 'Medium Gray', rgb: { r: 170, g: 170, b: 170 } },
-      34: { id: 33, name: 'Dark Red', rgb: { r: 165, g: 14, b: 30 } },
-      35: { id: 34, name: 'Light Red', rgb: { r: 250, g: 128, b: 114 } },
-      36: { id: 35, name: 'Dark Orange', rgb: { r: 228, g: 92, b: 26 } },
-      37: { id: 37, name: 'Dark Goldenrod', rgb: { r: 156, g: 132, b: 49 } },
-      38: { id: 38, name: 'Goldenrod', rgb: { r: 197, g: 173, b: 49 } },
-      39: { id: 39, name: 'Light Goldenrod', rgb: { r: 232, g: 212, b: 95 } },
-      40: { id: 40, name: 'Dark Olive', rgb: { r: 74, g: 107, b: 58 } },
-      41: { id: 41, name: 'Olive', rgb: { r: 90, g: 148, b: 74 } },
-      42: { id: 42, name: 'Light Olive', rgb: { r: 132, g: 197, b: 115 } },
-      43: { id: 43, name: 'Dark Cyan', rgb: { r: 15, g: 121, b: 159 } },
-      44: { id: 45, name: 'Light Blue', rgb: { r: 125, g: 199, b: 255 } },
-      45: { id: 46, name: 'Dark Indigo', rgb: { r: 77, g: 49, b: 184 } },
-      46: { id: 47, name: 'Dark Slate Blue', rgb: { r: 74, g: 66, b: 132 } },
-      47: { id: 48, name: 'Slate Blue', rgb: { r: 122, g: 113, b: 196 } },
-      48: { id: 49, name: 'Light Slate Blue', rgb: { r: 181, g: 174, b: 241 } },
-      49: { id: 53, name: 'Dark Peach', rgb: { r: 155, g: 82, b: 73 } },
-      50: { id: 54, name: 'Peach', rgb: { r: 209, g: 128, b: 120 } },
-      51: { id: 55, name: 'Light Peach', rgb: { r: 250, g: 182, b: 164 } },
-      52: { id: 50, name: 'Light Brown', rgb: { r: 219, g: 164, b: 99 } },
-      53: { id: 56, name: 'Dark Tan', rgb: { r: 123, g: 99, b: 82 } },
-      54: { id: 57, name: 'Tan', rgb: { r: 156, g: 132, b: 107 } },
-      55: { id: 36, name: 'Light Tan', rgb: { r: 214, g: 181, b: 148 } },
-      56: { id: 51, name: 'Dark Beige', rgb: { r: 209, g: 128, b: 81 } },
-      57: { id: 61, name: 'Dark Stone', rgb: { r: 109, g: 100, b: 63 } },
-      58: { id: 62, name: 'Stone', rgb: { r: 148, g: 140, b: 107 } },
-      59: { id: 63, name: 'Light Stone', rgb: { r: 205, g: 197, b: 158 } },
-      60: { id: 58, name: 'Dark Slate', rgb: { r: 51, g: 57, b: 65 } },
-      61: { id: 59, name: 'Slate', rgb: { r: 109, g: 117, b: 141 } },
-      62: { id: 60, name: 'Light Slate', rgb: { r: 179, g: 185, b: 209 } },
-      63: { id: 0, name: 'Transparent', rgb: null }
-    },
-    // --- END: Color data ---
-    // Optimized CSS Classes for reuse
-    CSS_CLASSES: {
-      BUTTON_PRIMARY: `
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        color: white; border: none; border-radius: 8px; padding: 10px 16px;
-        cursor: pointer; font-weight: 500; transition: all 0.3s ease;
-        display: flex; align-items: center; gap: 8px;
-      `,
-      BUTTON_SECONDARY: `
-        background: rgba(255,255,255,0.1); color: white;
-        border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
-        padding: 8px 12px; cursor: pointer; transition: all 0.3s ease;
-      `,
-      MODERN_CARD: `
-        background: rgba(255,255,255,0.1); border-radius: 12px;
-        padding: 18px; border: 1px solid rgba(255,255,255,0.1);
-        backdrop-filter: blur(5px);
-      `,
-      GRADIENT_TEXT: `
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        background-clip: text; font-weight: bold;
-      `
-    },
-    THEMES: {
-      "Classic Autobot": {
-        primary: "#000000",
-        secondary: "#111111",
-        accent: "#222222",
-        text: "#ffffff",
-        highlight: "#775ce3",
-        success: "#00ff00",
-        error: "#ff0000",
-        warning: "#ffaa00",
-        fontFamily: "'Segoe UI', Roboto, sans-serif",
-        borderRadius: "12px",
-        borderStyle: "solid",
-        borderWidth: "1px",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.1)",
-        backdropFilter: "blur(10px)",
-        animations: {
-          glow: false,
-          scanline: false,
-          pixelBlink: false,
-        },
-      },
-      "Neon Retro": {
-        primary: "#1a1a2e",
-        secondary: "#16213e",
-        accent: "#0f3460",
-        text: "#00ff41",
-        highlight: "#ff6b35",
-        success: "#39ff14",
-        error: "#ff073a",
-        warning: "#ffff00",
-        neon: "#00ffff",
-        purple: "#bf00ff",
-        pink: "#ff1493",
-        fontFamily: "'Press Start 2P', monospace",
-        borderRadius: "0",
-        borderStyle: "solid",
-        borderWidth: "3px",
-        boxShadow: "0 0 20px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.1)",
-        backdropFilter: "none",
-        animations: {
-          glow: true,
-          scanline: true,
-          pixelBlink: true,
-        },
-      },
-    },
-    currentTheme: "Classic Autobot",
-  }
-
-  const getCurrentTheme = () => CONFIG.THEMES[CONFIG.currentTheme]
-
-  const switchTheme = (themeName) => {
-    if (CONFIG.THEMES[themeName]) {
-      CONFIG.currentTheme = themeName
-      saveThemePreference()
-
-      // Remove existing theme styles
-      const existingStyle = document.querySelector('style[data-wplace-theme="true"]')
-      if (existingStyle) {
-        existingStyle.remove()
-      }
-
-      // Recreate UI with new theme (cleanup is handled in createUI)
-      createUI()
-    }
-  }
-
-  const saveThemePreference = () => {
-    try {
-      localStorage.setItem("wplace-theme", CONFIG.currentTheme)
-    } catch (e) {
-      console.warn("Could not save theme preference:", e)
-    }
-  }
-
-  const loadThemePreference = () => {
-    try {
-      const saved = localStorage.getItem("wplace-theme")
-      if (saved && CONFIG.THEMES[saved]) {
-        CONFIG.currentTheme = saved
-      }
-    } catch (e) {
-      console.warn("Could not load theme preference:", e)
-    }
-  }
-
-  const loadLanguagePreference = () => {
-    try {
-      const saved = localStorage.getItem("wplace_language")
-      if (saved && TEXT[saved]) {
-        state.language = saved
-      }
-    } catch (e) {
-      console.warn("Could not load language preference:", e)
-    }
-  }
-
-  // BILINGUAL TEXT STRINGS:)
-  const TEXT = {
-    en: {
-      title: "WPlace Auto-Image",
-      toggleOverlay: "Toggle Overlay",
-      scanColors: "Scan Colors",
-      uploadImage: "Upload Image",
-      resizeImage: "Resize Image",
-      selectPosition: "Select Position",
-      startPainting: "Start Painting",
-      stopPainting: "Stop Painting",
-      checkingColors: "🔍 Checking available colors...",
-      noColorsFound: "❌ Open the color palette on the site and try again!",
-      colorsFound: "✅ {count} available colors found. Ready to upload.",
-      loadingImage: "🖼️ Loading image...",
-      imageLoaded: "✅ Image loaded with {count} valid pixels",
-      imageError: "❌ Error loading image",
-      selectPositionAlert: "Paint the first pixel at the location where you want the art to start!",
-      waitingPosition: "👆 Waiting for you to paint the reference pixel...",
-      positionSet: "✅ Position set successfully!",
-      positionTimeout: "❌ Timeout for position selection",
-      startPaintingMsg: "🎨 Starting painting...",
-      paintingProgress: "🧱 Progress: {painted}/{total} pixels...",
-      noCharges: "⌛ No charges. Waiting {time}...",
-      paintingStopped: "⏹️ Painting stopped by user",
-      paintingComplete: "✅ Painting complete! {count} pixels painted.",
-      paintingError: "❌ Error during painting",
-      missingRequirements: "❌ Load an image and select a position first",
-      progress: "Progress",
-      pixels: "Pixels",
-      charges: "Charges",
-      estimatedTime: "Estimated time",
-      initMessage: "Click 'Upload Image' to begin",
-      waitingInit: "Waiting for initialization...",
-      initializingToken: "🔧 Initializing Turnstile token generator...",
-      tokenReady: "✅ Token generator ready - you can now start painting!",
-      tokenRetryLater: "⚠️ Token generator will retry when needed",
-      resizeSuccess: "✅ Image resized to {width}x{height}",
-      paintingPaused: "⏸️ Painting paused at position X: {x}, Y: {y}",
-      captchaNeeded: "❗ Token generation failed. Please try again in a moment.",
-      saveData: "Save Progress",
-      loadData: "Load Progress",
-      saveToFile: "Save to File",
-      loadFromFile: "Load from File",
-      dataManager: "Data Manager",
-      autoSaved: "✅ Progress saved automatically",
-      dataLoaded: "✅ Progress loaded successfully",
-      fileSaved: "✅ Progress saved to file successfully",
-      fileLoaded: "✅ Progress loaded from file successfully",
-      noSavedData: "❌ No saved progress found",
-      savedDataFound: "✅ Saved progress found! Load to continue?",
-      savedDate: "Saved on: {date}",
-      clickLoadToContinue: "Click 'Load Progress' to continue.",
-      fileError: "❌ Error processing file",
-      invalidFileFormat: "❌ Invalid file format",
-      paintingSpeed: "Painting Speed",
-      pixelsPerSecond: "pixels/second",
-      speedSetting: "Speed: {speed} pixels/sec",
-      settings: "Settings",
-      botSettings: "Bot Settings",
-      close: "Close",
-      language: "Language",
-      themeSettings: "Theme Settings",
-      themeSettingsDesc: "Choose your preferred color theme for the interface.",
-      languageSelectDesc: "Select your preferred language. Changes will take effect immediately.",
-      autoCaptcha: "Auto-CAPTCHA Solver (Turnstile)",
-      autoCaptchaDesc: "Automatically generates Turnstile tokens using integrated generator. Falls back to browser automation if needed.",
-      applySettings: "Apply Settings",
-      settingsSaved: "✅ Settings saved successfully!",
-      cooldownSettings: "Cooldown Settings",
-      waitCharges: "Wait until charges reach",
-      captchaSolving: "🔑 Generating Turnstile token...",
-      captchaFailed: "❌ Turnstile token generation failed. Trying fallback method...",
-      automation: "Automation",
-      noChargesThreshold: "⌛ Waiting for charges to reach {threshold}. Currently {current}. Next in {time}...",
-    },
-    ru: {
-      title: "WPlace Авто-Изображение",
-      scanColors: "Сканировать цвета",
-      uploadImage: "Загрузить изображение",
-      resizeImage: "Изменить размер изображения",
-      selectPosition: "Выбрать позицию",
-      startPainting: "Начать рисование",
-      stopPainting: "Остановить рисование",
-      checkingColors: "🔍 Проверка доступных цветов...",
-      noColorsFound: "❌ Откройте палитру цветов на сайте и попробуйте снова!",
-      colorsFound: "✅ Найдено доступных цветов: {count}. Готово к загрузке.",
-      loadingImage: "🖼️ Загрузка изображения...",
-      imageLoaded: "✅ Изображение загружено, валидных пикселей: {count}",
-      imageError: "❌ Ошибка при загрузке изображения",
-      selectPositionAlert: "Нарисуйте первый пиксель в месте, откуда начнётся рисунок!",
-      waitingPosition: "👆 Ожидание, пока вы нарисуете опорный пиксель...",
-      positionSet: "✅ Позиция успешно установлена!",
-      positionTimeout: "❌ Время ожидания выбора позиции истекло",
-      startPaintingMsg: "🎨 Начинаем рисование...",
-      paintingProgress: "🧱 Прогресс: {painted}/{total} пикселей...",
-      noCharges: "⌛ Нет зарядов. Ожидание {time}...",
-      paintingStopped: "⏹️ Рисование остановлено пользователем",
-      paintingComplete: "✅ Рисование завершено! Нарисовано пикселей: {count}.",
-      paintingError: "❌ Ошибка во время рисования",
-      missingRequirements: "❌ Сначала загрузите изображение и выберите позицию",
-      progress: "Прогресс",
-      pixels: "Пиксели",
-      charges: "Заряды",
-      estimatedTime: "Примерное время",
-      initMessage: "Нажмите 'Загрузить изображение', чтобы начать",
-      waitingInit: "Ожидание инициализации...",
-      initializingToken: "🔧 Инициализация генератора Turnstile токенов...",
-      tokenReady: "✅ Генератор токенов готов - можете начинать рисование!",
-      tokenRetryLater: "⚠️ Генератор токенов повторит попытку при необходимости",
-      resizeSuccess: "✅ Изображение изменено до {width}x{height}",
-      paintingPaused: "⏸️ Рисование приостановлено на позиции X: {x}, Y: {y}",
-      captchaNeeded: "❗ Генерация токена не удалась. Пожалуйста, попробуйте через некоторое время.",
-      saveData: "Сохранить прогресс",
-      loadData: "Загрузить прогресс",
-      saveToFile: "Сохранить в файл",
-      loadFromFile: "Загрузить из файла",
-      dataManager: "Менеджер данных",
-      autoSaved: "✅ Прогресс сохранён автоматически",
-      dataLoaded: "✅ Прогресс успешно загружен",
-      fileSaved: "✅ Прогресс успешно сохранён в файл",
-      fileLoaded: "✅ Прогресс успешно загружен из файла",
-      noSavedData: "❌ Сохранённый прогресс не найден",
-      savedDataFound: "✅ Найден сохранённый прогресс! Загрузить, чтобы продолжить?",
-      savedDate: "Сохранено: {date}",
-      clickLoadToContinue: "Нажмите 'Загрузить прогресс', чтобы продолжить.",
-      fileError: "❌ Ошибка при обработке файла",
-      invalidFileFormat: "❌ Неверный формат файла",
-      paintingSpeed: "Скорость рисования",
-      pixelsPerSecond: "пикселей/сек",
-      speedSetting: "Скорость: {speed} пикс./сек",
-      settings: "Настройки",
-      botSettings: "Настройки бота",
-      close: "Закрыть",
-      language: "Язык",
-      themeSettings: "Настройки темы",
-      themeSettingsDesc: "Выберите предпочтительную цветовую тему интерфейса.",
-      languageSelectDesc: "Выберите предпочтительный язык. Изменения вступят в силу немедленно.",
-      autoCaptcha: "Авто-решение CAPTCHA (Turnstile)",
-      autoCaptchaDesc: "Автоматически генерирует Turnstile токены используя встроенный генератор. Возвращается к автоматизации браузера при необходимости.",
-      applySettings: "Применить настройки",
-      settingsSaved: "✅ Настройки успешно сохранены!",
-      cooldownSettings: "Настройки перезарядки",
-      waitCharges: "Ждать до накопления зарядов",
-      captchaSolving: "🔑 Генерирую Turnstile токен...",
-      captchaFailed: "❌ Не удалось сгенерировать Turnstile токен. Пробую резервный метод...",
-      automation: "Автоматизация",
-      noChargesThreshold: "⌛ Ожидание зарядов до {threshold}. Сейчас {current}. Следующий через {time}...",
-    },
-    pt: {
-      title: "WPlace Auto-Image",
-      scanColors: "Escanear Cores",
-      uploadImage: "Upload da Imagem",
-      resizeImage: "Redimensionar Imagem",
-      selectPosition: "Selecionar Posição",
-      startPainting: "Iniciar Pintura",
-      stopPainting: "Parar Pintura",
-      checkingColors: "🔍 Verificando cores disponíveis...",
-      noColorsFound: "❌ Abra a paleta de cores no site e tente novamente!",
-      colorsFound: "✅ {count} cores encontradas. Pronto para upload.",
-      loadingImage: "🖼️ Carregando imagem...",
-      imageLoaded: "✅ Imagem carregada com {count} pixels válidos",
-      imageError: "❌ Erro ao carregar imagem",
-      selectPositionAlert: "Pinte o primeiro pixel на localização onde deseja que a arte comece!",
-      waitingPosition: "👆 Aguardando você pintar o pixel de referência...",
-      positionSet: "✅ Posição definida com sucesso!",
-      positionTimeout: "❌ Tempo esgotado para selecionar posição",
-      startPaintingMsg: "🎨 Iniciando pintura...",
-      paintingProgress: "🧱 Progresso: {painted}/{total} pixels...",
-      noCharges: "⌛ Sem cargas. Aguardando {time}...",
-      paintingStopped: "⏹️ Pintura interrompida pelo usuário",
-      paintingComplete: "✅ Pintura concluída! {count} pixels pintados.",
-      paintingError: "❌ Erro durante a pintura",
-      missingRequirements: "❌ Carregue uma imagem e selecione uma posição primeiro",
-      progress: "Progresso",
-      pixels: "Pixels",
-      charges: "Cargas",
-      estimatedTime: "Tempo estimado",
-      initMessage: "Clique em 'Upload da Imagem' para começar",
-      waitingInit: "Aguardando inicialização...",
-      initializingToken: "🔧 Inicializando gerador de tokens Turnstile...",
-      tokenReady: "✅ Gerador de tokens pronto - você pode começar a pintar!",
-      tokenRetryLater: "⚠️ Gerador de tokens tentará novamente quando necessário",
-      resizeSuccess: "✅ Imagem redimensionada для {width}x{height}",
-      paintingPaused: "⏸️ Pintura pausada na posição X: {x}, Y: {y}",
-      captchaNeeded: "❗ Falha na geração de token. Tente novamente em alguns instantes.",
-      saveData: "Salvar Progresso",
-      loadData: "Carregar Progresso",
-      saveToFile: "Salvar em Arquivo",
-      loadFromFile: "Carregar de Arquivo",
-      dataManager: "Dados",
-      autoSaved: "✅ Progresso salvo automaticamente",
-      dataLoaded: "✅ Progresso carregado com sucesso",
-      fileSaved: "✅ Salvo em arquivo com sucesso",
-      fileLoaded: "✅ Carregado de arquivo com sucesso",
-      noSavedData: "❌ Nenhum progresso salvo encontrado",
-      savedDataFound: "✅ Progresso salvo encontrado! Carregar para continuar?",
-      savedDate: "Salvo em: {date}",
-      clickLoadToContinue: "Clique em 'Carregar Progresso' para continuar.",
-      fileError: "❌ Erro ao processar arquivo",
-      invalidFileFormat: "❌ Formato de arquivo inválido",
-      paintingSpeed: "Velocidade de Pintura",
-      pixelsPerSecond: "pixels/segundo",
-      speedSetting: "Velocidade: {speed} pixels/seg",
-      settings: "Configurações",
-      botSettings: "Configurações do Bot",
-      close: "Fechar",
-      language: "Idioma",
-      themeSettings: "Configurações de Tema",
-      themeSettingsDesc: "Escolha seu tema de cores preferido para a interface.",
-      languageSelectDesc: "Selecione seu idioma preferido. As alterações terão efeito imediatamente.",
-      autoCaptcha: "Resolvedor de CAPTCHA Automático",
-      autoCaptchaDesc: "Tenta resolver o CAPTCHA automaticamente simulando a colocação manual de um pixel quando o token expira.",
-      applySettings: "Aplicar Configurações",
-      settingsSaved: "✅ Configurações salvas com sucesso!",
-      cooldownSettings: "Configurações de Cooldown",
-      waitCharges: "Aguardar até as cargas atingirem",
-      captchaSolving: "🤖 Tentando resolver o CAPTCHA...",
-      captchaFailed: "❌ Falha ao resolver CAPTCHA. Pinte um pixel manualmente.",
-      automation: "Automação",
-      noChargesThreshold: "⌛ Aguardando cargas atingirem {threshold}. Atual: {current}. Próxima em {time}...",
-    },
-    vi: {
-      title: "WPlace Auto-Image",
-      scanColors: "Quét màu",
-      uploadImage: "Tải lên hình ảnh",
-      resizeImage: "Thay đổi kích thước",
-      selectPosition: "Chọn vị trí",
-      startPainting: "Bắt đầu vẽ",
-      stopPainting: "Dừng vẽ",
-      checkingColors: "🔍 Đang kiểm tra màu sắc có sẵn...",
-      noColorsFound: "❌ Hãy mở bảng màu trên trang web và thử lại!",
-      colorsFound: "✅ Tìm thấy {count} màu. Sẵn sàng để tải lên.",
-      loadingImage: "🖼️ Đang tải hình ảnh...",
-      imageLoaded: "✅ Đã tải hình ảnh với {count} pixel hợp lệ",
-      imageError: "❌ Lỗi khi tải hình ảnh",
-      selectPositionAlert: "Vẽ pixel đầu tiên tại vị trí bạn muốn tác phẩm nghệ thuật bắt đầu!",
-      waitingPosition: "👆 Đang chờ bạn vẽ pixel tham chiếu...",
-      positionSet: "✅ Đã đặt vị trí thành công!",
-      positionTimeout: "❌ Hết thời gian chọn vị trí",
-      startPaintingMsg: "🎨 Bắt đầu vẽ...",
-      paintingProgress: "🧱 Tiến trình: {painted}/{total} pixel...",
-      noCharges: "⌛ Không có điện tích. Đang chờ {time}...",
-      paintingStopped: "⏹️ Người dùng đã dừng vẽ",
-      paintingComplete: "✅ Hoàn thành vẽ! Đã vẽ {count} pixel.",
-      paintingError: "❌ Lỗi trong quá trình vẽ",
-      missingRequirements: "❌ Hãy tải lên hình ảnh và chọn vị trí trước",
-      progress: "Tiến trình",
-      pixels: "Pixel",
-      charges: "Điện tích",
-      estimatedTime: "Thời gian ước tính",
-      initMessage: "Nhấp 'Tải lên hình ảnh' để bắt đầu",
-      waitingInit: "Đang chờ khởi tạo...",
-      initializingToken: "🔧 Đang khởi tạo bộ tạo token Turnstile...",
-      tokenReady: "✅ Bộ tạo token đã sẵn sàng - bạn có thể bắt đầu vẽ!",
-      tokenRetryLater: "⚠️ Bộ tạo token sẽ thử lại khi cần thiết",
-      resizeSuccess: "✅ Đã thay đổi kích thước hình ảnh thành {width}x{height}",
-      paintingPaused: "⏸️ Tạm dừng vẽ tại vị trí X: {x}, Y: {y}",
-      captchaNeeded: "❗ Tạo token thất bại. Vui lòng thử lại sau.",
-      saveData: "Lưu tiến trình",
-      loadData: "Tải tiến trình",
-      saveToFile: "Lưu vào tệp",
-      loadFromFile: "Tải từ tệp",
-      dataManager: "Dữ liệu",
-      autoSaved: "✅ Đã tự động lưu tiến trình",
-      dataLoaded: "✅ Đã tải tiến trình thành công",
-      fileSaved: "✅ Đã lưu vào tệp thành công",
-      fileLoaded: "✅ Đã tải từ tệp thành công",
-      noSavedData: "❌ Không tìm thấy tiến trình đã lưu",
-      savedDataFound: "✅ Tìm thấy tiến trình đã lưu! Tải để tiếp tục?",
-      savedDate: "Đã lưu vào: {date}",
-      clickLoadToContinue: "Nhấp 'Tải tiến trình' để tiếp tục.",
-      fileError: "❌ Lỗi khi xử lý tệp",
-      invalidFileFormat: "❌ Định dạng tệp không hợp lệ",
-      paintingSpeed: "Tốc độ vẽ",
-      pixelsPerSecond: "pixel/giây",
-      speedSetting: "Tốc độ: {speed} pixel/giây",
-      settings: "Cài đặt",
-      botSettings: "Cài đặt Bot",
-      close: "Đóng",
-      language: "Ngôn ngữ",
-      themeSettings: "Cài đặt Giao diện",
-      themeSettingsDesc: "Chọn chủ đề màu sắc yêu thích cho giao diện.",
-      languageSelectDesc: "Chọn ngôn ngữ ưa thích. Thay đổi sẽ có hiệu lực ngay lập tức.",
-      autoCaptcha: "Tự động giải CAPTCHA",
-      autoCaptchaDesc: "Tự động cố gắng giải CAPTCHA bằng cách mô phỏng việc đặt pixel thủ công khi token hết hạn.",
-      applySettings: "Áp dụng cài đặt",
-      settingsSaved: "✅ Đã lưu cài đặt thành công!",
-      cooldownSettings: "Cài đặt thời gian chờ",
-      waitCharges: "Chờ cho đến khi số lần sạc đạt",
-      captchaSolving: "🤖 Đang cố gắng giải CAPTCHA...",
-      captchaFailed: "❌ Giải CAPTCHA tự động thất bại. Vui lòng vẽ một pixel thủ công.",
-      automation: "Tự động hóa",
-      noChargesThreshold: "⌛ Đang chờ số lần sạc đạt {threshold}. Hiện tại {current}. Lần tiếp theo trong {time}...",
-    },
     id: {
       title: "WPlace Auto-Image",
       scanColors: "Pindai Warna",
@@ -1300,7 +711,7 @@
       noSavedData: "❌ 未找到已保存进度",
       savedDataFound: "✅ 找到已保存进度！是否加载继续？",
       savedDate: "保存时间: {date}",
-      clickLoadToContinue: "点击『加载进度』继续。",
+      clickLoadToContinue: "点击‘加载进度’继续。",
       fileError: "❌ 处理文件时出错",
       invalidFileFormat: "❌ 文件格式无效",
       paintingSpeed: "绘制速度",
@@ -1356,7 +767,7 @@
       pixels: "像素",
       charges: "次數",
       estimatedTime: "預計時間",
-      initMessage: "點擊『上傳圖像』開始",
+      initMessage: "點擊「上傳圖像」開始",
       waitingInit: "正在等待初始化...",
       initializingToken: "🔧 正在初始化 Turnstile 令牌產生器...",
       tokenReady: "✅ 令牌產生器已就緒 - 可以開始繪製！",
@@ -1376,7 +787,7 @@
       noSavedData: "❌ 未找到已儲存進度",
       savedDataFound: "✅ 找到已儲存進度！是否載入以繼續？",
       savedDate: "儲存時間: {date}",
-      clickLoadToContinue: "點擊『載入進度』繼續。",
+      clickLoadToContinue: "點擊「載入進度」繼續。",
       fileError: "❌ 處理檔案時出錯",
       invalidFileFormat: "❌ 檔案格式無效",
       paintingSpeed: "繪製速度",
@@ -1432,7 +843,7 @@
       pixels: "ピクセル",
       charges: "チャージ",
       estimatedTime: "推定時間",
-      initMessage: "'画像をアップロード'をクリックして開始",
+      initMessage: "「画像をアップロード」をクリックして開始",
       waitingInit: "初期化待機中...",
       initializingToken: "🔧 Turnstile トークン生成器を初期化中...",
       tokenReady: "✅ トークン生成器準備完了 - 描画できます！",
@@ -1452,7 +863,7 @@
       noSavedData: "❌ 保存された進捗がありません",
       savedDataFound: "✅ 保存された進捗が見つかりました。続行しますか？",
       savedDate: "保存日時: {date}",
-      clickLoadToContinue: "'進捗を読み込み'をクリックして続行。",
+      clickLoadToContinue: "「進捗を読み込み」をクリックして続行。",
       fileError: "❌ ファイル処理エラー",
       invalidFileFormat: "❌ 無効なファイル形式",
       paintingSpeed: "描画速度",
@@ -2913,129 +2324,49 @@
     },
 
     performSmartSave: () => {
-      if (!Utils.shouldAutoSave()) return false;
-      
-      state._saveInProgress = true;
-      const success = Utils.saveProgress();
-      
-      if (success) {
-        state._lastSavePixelCount = state.paintedPixels;
-        state._lastSaveTime = Date.now();
-        console.log(`💾 Auto-saved at ${state.paintedPixels} pixels`);
-      }
-      
-      state._saveInProgress = false;
-      return success;
+      return false;
     },
 
     // --- Data management helpers ---
 
-    // Base64 compression helpers for efficient storage
-    packPaintedMapToBase64: (paintedMap, width, height) => {
-      if (!paintedMap || !width || !height) return null;
-      const totalBits = width * height;
-      const byteLen = Math.ceil(totalBits / 8);
-      const bytes = new Uint8Array(byteLen);
-      let bitIndex = 0;
-      for (let y = 0; y < height; y++) {
-        const row = paintedMap[y];
-        for (let x = 0; x < width; x++) {
-          const bit = row && row[x] ? 1 : 0;
-          const b = bitIndex >> 3; // byte index
-          const o = bitIndex & 7;  // bit offset
-          if (bit) bytes[b] |= (1 << o);
-          bitIndex++;
-        }
-      }
-      let binary = "";
-      const chunk = 0x8000;
-      for (let i = 0; i < bytes.length; i += chunk) {
-        binary += String.fromCharCode.apply(null, bytes.subarray(i, Math.min(i + chunk, bytes.length)));
-      }
-      return btoa(binary);
-    },
-
-    unpackPaintedMapFromBase64: (base64, width, height) => {
-      if (!base64 || !width || !height) return null;
-      const binary = atob(base64);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-      const map = Array(height).fill().map(() => Array(width).fill(false));
-      let bitIndex = 0;
-      for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-          const b = bitIndex >> 3;
-          const o = bitIndex & 7;
-          map[y][x] = ((bytes[b] >> o) & 1) === 1;
-          bitIndex++;
-        }
-      }
-      return map;
-    },
-
-    // Migration helpers for backward compatibility
-    migrateProgressToV2: (saved) => {
-      if (!saved) return saved;
-      const isV1 = !saved.version || saved.version === '1' || saved.version === '1.0' || saved.version === '1.1';
-      if (!isV1) return saved; 
-
-      try {
-        const migrated = { ...saved };
-        const width = migrated.imageData?.width;
-        const height = migrated.imageData?.height;
-        if (migrated.paintedMap && width && height) {
-          const data = Utils.packPaintedMapToBase64(migrated.paintedMap, width, height);
-          migrated.paintedMapPacked = { width, height, data };
-        }
-        delete migrated.paintedMap;
-        migrated.version = '2';
-        return migrated;
-      } catch (e) {
-        console.warn('Migration to v2 failed, using original data:', e);
-        return saved;
-      }
-    },
-
-    migrateProgressToV21: (saved) => {
-      if (!saved) return saved;
-      if (saved.version === '2.1') return saved;
-      const isV2 = saved.version === '2' || saved.version === '2.0';
-      const isV1 = !saved.version || saved.version === '1' || saved.version === '1.0' || saved.version === '1.1';
-      if (!isV2 && !isV1) return saved; // save this for future
-      try {
-        const migrated = { ...saved };
-        // First migrate to v2 if needed
-        if (isV1) {
-          const width = migrated.imageData?.width;
-          const height = migrated.imageData?.height;
-          if (migrated.paintedMap && width && height) {
-            const data = Utils.packPaintedMapToBase64(migrated.paintedMap, width, height);
-            migrated.paintedMapPacked = { width, height, data };
-          }
-          delete migrated.paintedMap;
-        }
-        migrated.version = '2.1';
-        return migrated;
-      } catch (e) {
-        console.warn('Migration to v2.1 failed, using original data:', e);
-        return saved;
-      }
-    },
-
-  saveProgress: () => false,
-
-    loadProgress: () => null,
-
-    clearProgress: () => true,
-
-    restoreProgress: () => false,
-
-  saveProgressToFile: () => false,
-
-  loadProgressFromFile: async () => { throw new Error("Disabled"); },
-
     // Helper function to restore overlay from loaded data
-    restoreOverlayFromData: async () => false,
+    restoreOverlayFromData: async () => {
+      if (!state.imageLoaded || !state.imageData || !state.startPosition || !state.region) {
+        return false;
+      }
+
+      try {
+        // Recreate ImageBitmap from loaded pixel data
+        const imageData = new ImageData(
+          state.imageData.pixels,
+          state.imageData.width,
+          state.imageData.height
+        );
+
+        const canvas = new OffscreenCanvas(state.imageData.width, state.imageData.height);
+        const ctx = canvas.getContext('2d');
+        ctx.putImageData(imageData, 0, 0);
+        const imageBitmap = await canvas.transferToImageBitmap();
+
+        // Set up overlay with restored data
+        await overlayManager.setImage(imageBitmap);
+        await overlayManager.setPosition(state.startPosition, state.region);
+        overlayManager.enable();
+
+        // Update overlay button state
+        const toggleOverlayBtn = document.getElementById('toggleOverlayBtn');
+        if (toggleOverlayBtn) {
+          toggleOverlayBtn.disabled = false;
+          toggleOverlayBtn.classList.add('active');
+        }
+
+        console.log('Overlay restored from data');
+        return true;
+      } catch (error) {
+        console.error('Failed to restore overlay from data:', error);
+        return false;
+      }
+    },
   }
 
   // IMAGE PROCESSOR CLASS
@@ -4372,7 +3703,6 @@
         }
         .wplace-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            appearance: none;
             width: 14px;
             height: 14px;
             background: ${theme.highlight};
@@ -4775,9 +4105,13 @@
           <div class="wplace-section-title">🖼️ Image Management</div>
           <div class="wplace-controls">
             <div class="wplace-row">
-              <button id="uploadBtn" class="wplace-btn wplace-btn-upload">
+              <button id="uploadBtn" class="wplace-btn wplace-btn-upload" disabled title="🔄 Waiting for initial setup to complete...">
                 <i class="fas fa-upload"></i>
                 <span>${Utils.t("uploadImage")}</span>
+              </button>
+              <button id="resizeBtn" class="wplace-btn wplace-btn-primary" disabled>
+                <i class="fas fa-expand"></i>
+                <span>${Utils.t("resizeImage")}</span>
               </button>
             </div>
             <div class="wplace-row single">
@@ -4823,7 +4157,6 @@
                 </div>
             </div>
         </div>
-
 
       </div>
     `
@@ -5545,10 +4878,10 @@
     const startBtn = container.querySelector("#startBtn")
     const stopBtn = container.querySelector("#stopBtn")
     
-    // Upload доступен всегда
+    // Disable upload button until initial setup is complete (startup only)
     if (uploadBtn) {
-      uploadBtn.disabled = false;
-      uploadBtn.title = "";
+      uploadBtn.disabled = !state.initialSetupComplete;
+      uploadBtn.title = state.initialSetupComplete ? "" : "🔄 Waiting for initial setup to complete...";
     }
     
     const minimizeBtn = container.querySelector("#minimizeBtn")
@@ -6003,7 +5336,7 @@
       }
     }
 
-
+    // Data save/load UI removed
 
     updateUI = (messageKey, type = "default", params = {}) => {
       const message = Utils.t(messageKey, params)
@@ -6073,6 +5406,13 @@
             ` : ''}
         `;
     }
+
+    updateDataButtons = () => {
+      const hasImageData = state.imageLoaded && state.imageData
+      // save/load removed
+    }
+
+    updateDataButtons()
 
     function showResizeDialog(processor) {
       let baseProcessor = processor;
@@ -6997,7 +6337,11 @@
 
     if (resizeBtn) {
       resizeBtn.addEventListener("click", () => {
-        Utils.showAlert("Редактирование изображения отключено", "warning")
+        if (state.imageLoaded && state.imageData.processor && state.colorsChecked) {
+          showResizeDialog(state.imageData.processor)
+        } else if (!state.colorsChecked) {
+          Utils.showAlert("Please upload an image first to capture available colors", "warning")
+        }
       })
     }
 
@@ -7090,6 +6434,7 @@
       uploadBtn.disabled = true
       selectPosBtn.disabled = true
       resizeBtn.disabled = true
+      saveBtn.disabled = true
       toggleOverlayBtn.disabled = true;
 
       updateUI("startPaintingMsg", "success")
@@ -7127,12 +6472,8 @@
         state.running = false
         stopBtn.disabled = true
         updateUI("paintingStopped", "warning")
-
-        
       })
     }
-
-
 
     if (cooldownSlider && cooldownValue) {
       cooldownSlider.addEventListener("input", (e) => {
@@ -7252,7 +6593,8 @@
                   total: state.totalPixels,
                 })
 
-                              
+                // Use smart save instead of fixed interval
+                Utils.performSmartSave();
 
                 if (CONFIG.PAINTING_SPEED_ENABLED && state.paintingSpeed > 0 && pixelBatch.pixels.length > 0) {
                   // paintingSpeed now represents batch size, so add a small delay based on batch size
@@ -7325,7 +6667,8 @@
                 total: state.totalPixels,
               })
 
-              
+              // Use smart save instead of fixed interval
+              Utils.performSmartSave();
 
               if (CONFIG.PAINTING_SPEED_ENABLED && state.paintingSpeed > 0 && pixelBatch.pixels.length > 0) {
                 const delayPerPixel = 1000 / state.paintingSpeed // ms per pixel
@@ -7364,7 +6707,8 @@
             });
             await updateStats();
             
-            
+            // Allow auto save during cooldown
+            Utils.performSmartSave();
             
             await Utils.sleep(state.cooldown);
           }
@@ -7388,7 +6732,8 @@
             Utils.markPixelPainted(pixel.x, pixel.y, pixelBatch.regionX, pixelBatch.regionY);
           })
           state.currentCharges -= pixelBatch.pixels.length;
-          
+          // Final save with painted map
+          /* removed saveProgress */
           
           if (CONFIG.PAINTING_SPEED_ENABLED && state.paintingSpeed > 0 && pixelBatch.pixels.length > 0) {
             const delayPerPixel = 1000 / state.paintingSpeed // ms per pixel
@@ -7407,11 +6752,13 @@
 
     if (state.stopFlag) {
       updateUI("paintingStopped", "warning")
-      
+      // Save progress removed
     } else {
       updateUI("paintingComplete", "success", { count: state.paintedPixels })
       state.lastPosition = { x: 0, y: 0 }
       // Keep painted map until user starts new project
+      // state.paintedMap = null  // Commented out to preserve data
+      /* removed final save */
       overlayManager.clear();
       const toggleOverlayBtn = document.getElementById('toggleOverlayBtn');
       if (toggleOverlayBtn) {
@@ -7513,38 +6860,10 @@
       }
     }
 
-    // Safety filter: skip pixels that already have the desired color on the board
-    let pixelsToSend = []
-    try {
-      for (let i = 0; i < pixelBatch.length; i++) {
-        const p = pixelBatch[i]
-        try {
-          const current = await overlayManager.getTilePixelColor(regionX, regionY, p.x, p.y)
-          if (current && Array.isArray(current)) {
-            const [cr, cg, cb] = current
-            const currentId = findClosestColor([cr, cg, cb], state.availableColors)
-            if (currentId === p.color) {
-              // Already correct color; skip
-              continue
-            }
-          }
-        } catch (e) { /* ignore per-pixel read errors */ }
-        pixelsToSend.push(p)
-      }
-    } catch (e) {
-      console.warn('Batch filtering failed, sending unfiltered batch:', e)
-      pixelsToSend = pixelBatch.slice()
-    }
-
-    if (pixelsToSend.length === 0) {
-      console.log('🛑 All pixels in batch already match target colors; nothing to send')
-      return true
-    }
-
-    const coords = new Array(pixelsToSend.length * 2)
-    const colors = new Array(pixelsToSend.length)
-    for (let i = 0; i < pixelsToSend.length; i++) {
-      const pixel = pixelsToSend[i]
+    const coords = new Array(pixelBatch.length * 2)
+    const colors = new Array(pixelBatch.length)
+    for (let i = 0; i < pixelBatch.length; i++) {
+      const pixel = pixelBatch[i]
       coords[i * 2] = pixel.x
       coords[i * 2 + 1] = pixel.y
       colors[i] = pixel.color
@@ -7775,11 +7094,46 @@
   // Function to enable file operations after initial startup setup is complete
   function enableFileOperations() {
     state.initialSetupComplete = true;
+    
+    const loadBtn = document.querySelector("#loadBtn");
+    const loadFromFileBtn = document.querySelector("#loadFromFileBtn");
     const uploadBtn = document.querySelector("#uploadBtn");
+    
+    if (loadBtn) {
+      loadBtn.disabled = false;
+      loadBtn.title = "";
+      // Add a subtle animation to indicate the button is now available
+      loadBtn.style.animation = "pulse 0.6s ease-in-out";
+      setTimeout(() => {
+        if (loadBtn) loadBtn.style.animation = "";
+      }, 600);
+      console.log("✅ Load Progress button enabled after initial setup");
+    }
+    
+    if (loadFromFileBtn) {
+      loadFromFileBtn.disabled = false;
+      loadFromFileBtn.title = "";
+      // Add a subtle animation to indicate the button is now available
+      loadFromFileBtn.style.animation = "pulse 0.6s ease-in-out";
+      setTimeout(() => {
+        if (loadFromFileBtn) loadFromFileBtn.style.animation = "";
+      }, 600);
+      console.log("✅ Load from File button enabled after initial setup");
+    }
+    
     if (uploadBtn) {
       uploadBtn.disabled = false;
       uploadBtn.title = "";
+      // Add a subtle animation to indicate the button is now available
+      uploadBtn.style.animation = "pulse 0.6s ease-in-out";
+      setTimeout(() => {
+        if (uploadBtn) uploadBtn.style.animation = "";
+      }, 600);
+      console.log("✅ Upload Image button enabled after initial setup");
     }
+    
+    // Show a notification that file operations are now available
+    Utils.showAlert("📂 File operations (Load/Upload) are now available!", "success");
   }
 
   // Optimized token initialization with better timing and error handling
@@ -7788,7 +7142,7 @@
     if (isTokenValid()) {
       console.log("✅ Valid token already available, skipping initialization");
       updateUI("tokenReady", "success");
-      enableFileOperations();
+      enableFileOperations(); // Enable file operations since initial setup is complete
       return;
     }
 
@@ -7805,15 +7159,19 @@
         console.log("✅ Startup token generated successfully");
         updateUI("tokenReady", "success");
         Utils.showAlert("🔑 Token generator ready!", "success");
-        enableFileOperations();
+        enableFileOperations(); // Enable file operations since initial setup is complete
       } else {
         console.warn("⚠️ Startup token generation failed, will retry when needed");
         updateUI("tokenRetryLater", "warning");
+        // Still enable file operations even if initial token generation fails
+        // Users can load progress and use manual/hybrid modes
         enableFileOperations();
       }
     } catch (error) {
       console.warn("⚠️ Startup token generation failed:", error);
       updateUI("tokenRetryLater", "warning");
+      // Still enable file operations even if initial setup fails
+      // Users can load progress and use manual/hybrid modes
       enableFileOperations();
       // Don't show error alert for initialization failures, just log them
     }
